@@ -41,13 +41,14 @@ pipeline {
         stage('check the status'){
             steps{
                 script{
-                    def deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT --timeout=30s || echo FAILED").trim();
-                    if(deploymentStatus.contains('succssfully rollout'))
-                    {
-                        error "deployment is success"
-                    }
-                    else
-                    {
+                    withAWS(credentials: 'aws-auth', region: 'us-east-1'){
+                      def deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT --timeout=30s || echo FAILED").trim();
+                      if(deploymentStatus.contains('succssfully rollout'))
+                      {
+                         error "deployment is success"
+                      }
+                      else
+                      {
                         sh """
                           helm rollback $COMPONENT -n roboshop
                           sleep 20
@@ -60,6 +61,7 @@ pipeline {
                           else{
                             error "rollback is failure and deploymenet also failure"
                           }
+                      }
                     }
                 }
             }
