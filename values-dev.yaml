@@ -1,0 +1,6 @@
+deployement:
+  replicas: 1
+  imageUrl: srinunaik208/catalogue
+  imageVersion: IMAGE_VERSION
+service:
+  targetPort: 8080
