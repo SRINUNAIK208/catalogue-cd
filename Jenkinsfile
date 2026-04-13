@@ -45,7 +45,7 @@ pipeline {
                       def deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT -n roboshop --timeout=30s || echo FAILED").trim();
                       if(deploymentStatus.contains('succssfully rollout'))
                       {
-                         error "deployment is success"
+                         echo "deployment is success"
                       }
                       else
                       {
@@ -53,8 +53,8 @@ pipeline {
                           helm rollback $COMPONENT -n roboshop
                           sleep 20
                         """
-                         deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT -n roboshop --timeout=30s || echo FAILED").trim();
-                         if(deploymentStatus.contains('successfully rolled out'))
+                         def rollbackStatus  = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT -n roboshop --timeout=30s || echo FAILED").trim();
+                         if(rollbackStatus .contains('successfully rolled out'))
                          {
                             error "rollback is success deployment is failure"
                           }
