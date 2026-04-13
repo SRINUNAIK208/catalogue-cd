@@ -1,6 +1,6 @@
 deployement:
   replicas: 1
-  imageUrl: srinunaik208/catalogue
+  imageUrl: 824333137275.dkr.ecr.us-east-1.amazonaws.com/roboshop/catalogue
   imageVersion: IMAGE_VERSION
 service:
   targetPort: 8080

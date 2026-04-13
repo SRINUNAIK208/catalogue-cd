@@ -53,7 +53,7 @@ pipeline {
                           helm rollback $COMPONENT -n roboshop
                           sleep 20
                         """
-                         deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT --timeout=30s || echo FAILED").trim();
+                         deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT -n roboshop --timeout=30s || echo FAILED").trim();
                          if(deploymentStatus.contains('successfully rolled out'))
                          {
                             error "rollback is success deployment is failure"
