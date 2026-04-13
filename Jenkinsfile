@@ -28,7 +28,7 @@ pipeline {
                        aws eks update-kubeconfig --region $REGION --name "$PROJECT"
                        kubectl get nodes
                        sed -i "s/IMAGE_VERSION/${params.appVersion}/g" values-${params.deploy_to}.yaml
-                       helm upgrade --install $COMPONENT -f values-${params.deploy_to}.yaml .
+                       helm upgrade --install $COMPONENT -n roboshop -f values-${params.deploy_to}.yaml .
                      """
                     }
 
@@ -42,7 +42,7 @@ pipeline {
             steps{
                 script{
                     withAWS(credentials: 'aws-auth', region: 'us-east-1'){
-                      def deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT --timeout=30s || echo FAILED").trim();
+                      def deploymentStatus = sh(returnStdout: true, script: "kubectl rollout status deployment/$COMPONENT -n roboshop --timeout=30s || echo FAILED").trim();
                       if(deploymentStatus.contains('succssfully rollout'))
                       {
                          error "deployment is success"
