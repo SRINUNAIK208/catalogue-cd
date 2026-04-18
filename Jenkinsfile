@@ -27,6 +27,7 @@ pipeline {
                      sh """
                        aws eks update-kubeconfig --region $REGION --name "$PROJECT"
                        kubectl get nodes
+                       kubectl create namespace roboshop
                        sed -i "s/IMAGE_VERSION/${params.appVersion}/g" values-${params.deploy_to}.yaml
                        helm upgrade --install $COMPONENT -n roboshop -f values-${params.deploy_to}.yaml .
                      """
